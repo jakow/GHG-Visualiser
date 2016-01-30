@@ -1,0 +1,24 @@
+<html>
+<head>
+</head>
+<body>
+
+<script type="text/javascript"
+  src="dygraph-combined.js"></script>
+
+<script type="text/javascript">
+  g3 = new Dygraph(
+    document.getElementById("graphdiv3"),
+    "http://www.geos.ed.ac.uk/~ppalmer/mace-head-co2.csv",
+    {
+      xlabel: 'Time of Year',
+      ylabel: 'CO<sub>2</sub> [ppb]',
+      visibility: [true,false,false],
+      rollPeriod: 7,
+      showRoller: true
+    }
+  );
+</script>
+
+</body>
+</html>

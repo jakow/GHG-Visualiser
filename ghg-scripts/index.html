@@ -1,0 +1,344 @@
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-gb" dir="ltr">
+  <head>
+    <title>Data display test (May break any time!)</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<!--     <script src="http://d3js.org/topojson.v1.min.js"></script> -->
+    <script src="http://openlayers.org/en/v3.5.0/build/ol.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="http://openlayers.org/en/v3.5.0/css/ol.css" type="text/css">
+<!--     <script src="datamaps.world.min.js"></script> -->
+<!--     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> -->
+  </head>
+  <body>
+    <h1>Data display test</h1>
+    <p>Using imaginary data, and the script may break any time when I'm working on it.</p>
+    <ul>
+    <li>Click on a station on the map to select it
+    <li>Click somewhere else on the map to unselect all stations
+    <li style="color:gray">Todo: Select different species (CO2, CH4, N2O)
+    <li style="color:gray">Todo: Zoom into the timescale
+    <li style="color:gray">Todo: Clicking on a time shows the concentration at each station as colourcoded circles.
+    <li style="color:gray">Todo: Animation going along time, with the station circles changing colour according to concentration.
+    </ul>
+  <script>
+  </script>
+
+<style>
+.axis text {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis dataline {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}  
+
+.datapoint {
+  fill: blue;  
+}
+
+</style>
+
+<!-- Divs for plot elements -->
+<div id="charts">
+<!--  <div id="chart-map" class="map">
+    <div class="title">Map (using DataMaps)</div>
+    <div id="mapChart"></div>
+  </div>-->
+  <div id="box-stationinfo" class="stationinfo" style="width:30%; float:right;">
+    <div id="stationname">No station selected</div>
+    <div id="stationdescription"></div>
+    <img id="stationimage" style="width:80%">
+  </div>
+  <div id="chart-openlayer" class="openlayer" style="width:65%;">
+    <div class="title">Map (using OpenLayers with OSM Tiles)</div>
+    <div id="openlayerChart"></div>
+  </div>
+  <div id="chart-timeseries" class="timeseries" style="width:65%;">
+    <div class="title">Time series</div>
+    <svg id="tsChart"><circle /></svg>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+// ==================================================================
+// Preparation 
+// Define size and margins
+var margin = {top: 20, right: 30, bottom: 30, left: 40},
+    mapWidth = 600 - margin.left - margin.right,
+    mapHeight = 400 - margin.top - margin.bottom,
+    tsWidth = 800 - margin.left - margin.right,
+    tsHeight = 200 - margin.top - margin.bottom;
+
+// Set map sizes
+// document.getElementById("mapChart").style.width = mapWidth;
+// document.getElementById("mapChart").style.height = mapHeight;
+
+document.getElementById("openlayerChart").style.width = mapWidth;
+document.getElementById("openlayerChart").style.height = mapHeight;
+
+// // ==================================================================
+// // Setup Datamap
+// var datamap = new Datamap({
+//   element: document.getElementById('mapChart'),
+//   height:mapHeight,
+//   width:mapWidth,
+//   scope: 'world',
+// //   Zoom in on UK
+//   setProjection: function(element) {
+//     var projection = d3.geo.equirectangular()
+//       .center([-3, 55])
+//       .translate([mapWidth / 2, mapHeight / 2])
+//       .scale(2000);
+//     var path = d3.geo.path()
+//       .projection(projection);
+//     return {path: path, projection: projection};
+//   },
+//   fills: {
+//     defaultFill: 'green',
+//     bubble: 'blue'
+//   }
+// });
+// 
+
+// ==================================================================
+// Setup Openlayers 
+// Styles
+var stationStyle = new ol.style.Style({
+  image: new ol.style.Circle({
+    radius: 5,
+    fill: new ol.style.Fill({color: 'blue'})
+  })  
+});
+
+var stationSelectedStyle = new ol.style.Style({
+  image: new ol.style.Circle({
+    radius: 10,
+    fill: new ol.style.Fill({color: 'blue'})
+  })  
+});
+
+// Setup Openlayer with OSM
+var openlayerTileLayer = new ol.layer.Tile({
+  source: new ol.source.OSM()
+});
+
+var openlayerStationSource = new ol.source.Vector({
+  projection: 'EPSG:4326'
+});
+
+var openlayerStationLayer = new ol.layer.Vector({
+  source: openlayerStationSource,
+  style: stationStyle
+});
+
+var openlayerView = new ol.View({
+  center: ol.proj.transform([-3, 55], 'EPSG:4326', 'EPSG:3857'),
+  zoom: 5
+});
+
+var openlayerMap = new ol.Map({
+  target: 'openlayerChart',
+  controls: ol.control.defaults(),
+  layers: [openlayerTileLayer, openlayerStationLayer],
+  view: openlayerView
+});
+
+// ==================================================================
+// Setup timeseries plot
+
+// Select the tsChart container
+var tschart = d3.select("#tsChart")
+  .attr("width", tsWidth + margin.left + margin.right)
+  .attr("height", tsHeight + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var parseDate = d3.time.format("%Y-%m-%d").parse;
+
+// Define the scales
+var x = d3.time.scale()
+  .range([0, tsWidth])
+
+var y = d3.scale.linear()
+  .range([tsHeight, 0]);
+
+
+// ==================================================================
+// Process the station metadata
+
+// Create a variable so that stations can be used later
+var stations;
+d3.csv("stationdata.csv", function(data) {
+  stations = data;
+
+  stations.forEach( function(entry) {
+    entry.lat = +entry.lat;
+    entry.lon = +entry.lon;
+/*    entry.latitude = entry.lat; 
+    entry.longitude = entry.lon; 
+    entry.radius = 10;	// for DataMaps
+    entry.fillKey = 'bubble'; // for DataMaps*/
+    entry.feature = new ol.Feature({
+      geometry: new ol.geom.Point(ol.proj.transform([entry.lon, entry.lat], 'EPSG:4326', 'EPSG:3857')),
+      name: entry.name,
+      description: entry.description,
+      image: entry.image,
+      id: entry.id
+    });
+    entry.feature.setId(+entry.id);
+    openlayerStationSource.addFeature(entry.feature);
+    return entry;
+  });
+
+// put into Datamap
+//   datamap.bubbles( stations );
+
+});
+
+// ==================================================================
+// Process the timeries data
+
+// data file has the following format:
+// date,station,value
+// 1991-06-10,1,358.95
+// 1991-06-10,1,358.97
+
+d3.csv("testdata.csv", dataType, function(error, data) {
+  if (error) return console.error(error);
+//    Filter out missing values
+  data = data.filter(function(d) { return isNaN(d.value) ? NaN : d.value; });
+
+// Set plotting domain 
+  x.domain(d3.extent(data, function(d) { return d.date;  }));
+  y.domain(d3.extent(data, function(d) { return d.value; }));
+
+  var circle = tschart.selectAll("circle")
+      .data(data)
+      .enter().append("circle")
+      .attr("cx", function(d) { return x(d.date); })
+      .attr("cy", function(d) { return y(d.value); })
+      .attr("r", 2)
+      .attr("style", "fill:red;")
+      .attr("style", "visibility:hidden;")
+      .attr("class", function(d) { return "datapoint p-"+d.station});
+
+  var stationids=d3.extent(data, function(d) { return d.station;  });
+  
+  for (s = stationids[0]; s <= stationids[1]; s++) {
+
+//     Select subset of data for this station
+    sdata=data.filter(function(d) { return d.station==s });
+
+    var line = d3.svg.line()
+	.x(function(d) { return x(d.date);  })
+	.y(function(d) { return y(d.value); });
+      
+    tschart.append("path")
+	.attr("class","dataline l-"+s)
+	.attr("fill","none")
+	.attr("stroke","black")
+	.attr("d",line(sdata));
+	
+    delete sdata;
+  };
+
+      
+  var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom")
+
+  var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+  tschart.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + tsHeight + ")")
+      .call(xAxis);
+      
+  tschart.append("g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(" - tsWidth + ", 0)")
+      .call(yAxis);
+
+});
+
+// ==================================================================
+// Selecting a station on OpenLayer
+
+var layerSelected = new ol.FeatureOverlay({
+  map: openlayerMap,
+  style: stationSelectedStyle
+});
+
+openlayerMap.on('singleclick', function(evt) {
+//   Get the correct feature info
+//   var viewResolution = /** @type {number} */ (openlayerView.getResolution());
+//   var station = openlayerStationSource.getClosestFeatureToCoordinate(evt.coordinate);
+
+  var station = openlayerMap.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+    return feature;
+  });
+
+// if clicked on a station, toggle it on and off, else unselect all stations
+  if (station) {
+    
+//   Todo: toggle on and off
+//     Station info box
+    document.getElementById('stationname').innerHTML = 'Station '+station.get('id')+': '+station.get('name');
+    document.getElementById('stationdescription').innerHTML = station.get('description');
+    document.getElementById('stationimage').src = station.get('image');
+    document.getElementById('stationimage').style.visibility = 'visible';
+//     add station to the layerSelected overlay
+    layerSelected.addFeature(station);
+//     timeseries plot
+    var datapoints = document.getElementsByClassName('p-'+station.get('id'));
+    var i;
+    for (i = 0; i < datapoints.length; i++) {
+	datapoints[i].style.visibility = 'visible';
+    }
+
+  } else {
+//     Clear the station info box
+    document.getElementById('stationname').innerHTML = 'No station selected';
+    document.getElementById('stationdescription').innerHTML = '';
+    document.getElementById('stationimage').src = '';
+    document.getElementById('stationimage').style.visibility = 'hidden';
+//     remove all stations from te layerSelected overlay
+    var selectedStations = layerSelected.getFeatures();
+    for (i = selectedStations.getLength()-1; i >=0; i--) {
+	layerSelected.removeFeature(selectedStations.item(i));
+    }
+//     hide the datapoints again
+    var datapoints = document.getElementsByClassName('datapoint');
+    for (i = 0; i < datapoints.length; i++) {
+	datapoints[i].style.visibility = 'hidden';
+  }
+
+
+  };
+
+});
+
+
+
+// ==================================================================
+// Helper functions
+
+// Convert to correct types
+function dataType(d) {
+  d.date = parseDate(d.date); 
+  d.value = +d.value; // coerce to number
+  d.station = +d.station;
+  return d;
+}
+
+</script>
+
+  
+  </body>
+</html>
