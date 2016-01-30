@@ -10,12 +10,12 @@
 angular.module('frontendApp')
   .controller('MapCtrl', function ($scope, $window) {
    $scope.mapOptions =  {
-      lat: 51.505,
-      lon: -0.09,
-      zoom: 8
+      lat: 54,
+      lon: -3.09,
+      zoom: 6
     };
 
-    //$scope.width = 800; //DOM Manipulation in controller :(
-    $scope.height = 300;
+    $scope.width = 500; //DOM Manipulation in controller :(
+    $scope.height = 700;
 
   });
