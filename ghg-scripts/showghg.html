@@ -1,0 +1,69 @@
+<html>
+<head>
+<script type="text/javascript"
+  src="dygraph-combined.js"></script>
+</head>
+<body>
+
+
+<img src="http://www.greenhouse-gases.org.uk/images/gaugepartnerlogos.png" width="50%">
+<h1>GAUGE: Greenhouse gAs Uk and Global Emissions</h1>
+
+<h3>
+This is a CO<sub>2</sub> time series...
+</h3>
+
+<div id="graphdiv3" style="width:700px;"></div>
+<script type="text/javascript">
+  g3 = new Dygraph(
+    document.getElementById("graphdiv3"),
+    "http://www.geos.ed.ac.uk/~ppalmer/mace-head-co2.csv",
+    {
+      xlabel: 'Time of Year',
+      ylabel: 'CO<sub>2</sub> [ppb]',
+      visibility: [true,false,false],
+      rollPeriod: 7,
+      showRoller: true
+    }
+  );
+</script>
+
+<h3>This is a CH<sub>4</sub> time series...
+</h3>
+
+<div id="graphdiv2" style="width:700px;"></div>
+<script type="text/javascript">
+  g2 = new Dygraph(
+    document.getElementById("graphdiv2"),
+    "http://www.geos.ed.ac.uk/~ppalmer/mace-head-co2.csv",
+    {
+      xlabel: 'Time of Year',
+      ylabel: 'CH<sub>4</sub> [ppb]',
+      visibility: [false,true,false],
+      rollPeriod: 7,
+      showRoller: true
+    }
+  );
+</script>
+
+
+<h3>This is a N<sub>2</sub>O time series...
+</h3>
+
+<div id="graphdiv1" style="width:700px;"></div>
+<script type="text/javascript">
+  g1 = new Dygraph(
+    document.getElementById("graphdiv1"),
+    "http://www.geos.ed.ac.uk/~ppalmer/mace-head-co2.csv",
+    {
+      xlabel: 'Time of Year',
+      ylabel: 'N2<sub>2</sub>O [ppb]',
+      visibility: [false,false,true],
+      rollPeriod: 7,
+      showRoller: true
+    }
+  );
+</script>
+
+</body>
+</html>

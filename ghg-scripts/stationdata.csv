@@ -1,0 +1,5 @@
+id,lat,lon,alt,name,description,image,data
+1,53.33,-8.9,10,Good station,A tower on the coast,station1.jpg,data1.csv
+2,56.24,-3.2,10,Top secret station,We can't tell you,station2.jpg,data2.csv
+3,52.03,1.54,25,Southcoast Station,Another tower on the coast,station3.jpg,data3.csv
+4,55.00,-3.00,10,Centre of map,this isn't really a station,station4.jpg,data4.csv
