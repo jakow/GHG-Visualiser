@@ -33,11 +33,13 @@
 <!-- container for openlayer maps -->
 <div class="container">
   <div class="row" id="map-container" ng-controller="MapCtrl">
-    <openlayers ol-center="mapOptions" height="{{height}}" width="{{width}}"></openlayers>
+    <openlayers ol-center="mapOptions" height="{{height}}" ></openlayers>
   </div>
   <!-- container for openlayer maps -->
   <div class="row" id="graph-container">
-
+      <ghg-chart chart-data="data" chart-options="{background: 'green'}"  range="[1990, 2010]" zoom="1" transition="">
+        <ghg-vertical-bar ng-repeat="bar in bars"></ghg-vertical-bar>
+      </ghg-chart>
   </div>
 </div>
 <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->

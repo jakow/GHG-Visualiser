@@ -15,7 +15,7 @@ angular.module('frontendApp')
       zoom: 8
     };
 
-    $scope.width = 800; //DOM Manipulation in controller :(
+    //$scope.width = 800; //DOM Manipulation in controller :(
     $scope.height = 300;
 
   });
