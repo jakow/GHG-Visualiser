@@ -30,13 +30,13 @@ angular.module('frontendApp', ["openlayers-directive"])
     var defaultStationStyle = {
       image: {
         circle: {
-          radius: 6,
+          radius: 8,
           fill: {
-            color: 'rgba(0, 0, 255, 1)'
+            color: 'rgba(0, 0, 255, 0.2)'
           },
           stroke: {
-            color: 'gray',
-              width: 1
+            color: 'rgba(0, 0, 255, 1)',
+            width: 1
           }
         }
       }
@@ -73,7 +73,8 @@ angular.module('frontendApp', ["openlayers-directive"])
       });
       if(station) {
         $scope.$apply(function(scope) {
-          $scope.stations_markers[station.getId() - 1].style.image.circle.fill.color = 'rgba(255, 0, 0, 1)';
+          $scope.stations_markers[station.getId() - 1].style.image.circle.fill.color = 'rgba(255, 0, 0, 0.4)';
+          $scope.stations_markers[station.getId() - 1].style.image.circle.stroke.color = 'rgba(255, 0, 0, 1)';
         });
       }
     });
