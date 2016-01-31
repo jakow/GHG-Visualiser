@@ -66,12 +66,12 @@ angular.module('frontendApp')
 
     $scope.$watch(
       function() { return locationData.location},
-      function(newData) {
-        if (!_.isEmpty(newData)) {
-          console.log(newData);
-          $scope.location = newData;
+      function(newLocation) {
+        if (!_.isEmpty(newLocation)) {
+          console.log(newLocation);
+          $scope.location = newLocation;
           var request = {};
-          request.id = newData.id;
+          request.id = newLocation.id;
           request.measurements = "CO2";
           fetchMeasurements(request).then(function(measurements) {
             $scope.data = [measurements];
@@ -79,7 +79,9 @@ angular.module('frontendApp')
         }
         else {
           $scope.data = [];
+          $scope.api.clearElement();
         }
+        console.log($scope.data);
       }
     );
 
