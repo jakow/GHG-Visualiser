@@ -7,7 +7,7 @@
  * # ghgChart
  */
 angular.module('frontendApp')
-  .directive('ghgChart', function (d3Service) {
+  .directive('ghgChart', function () {
     return {
       restrict: 'E',
       transclude: true,
@@ -16,19 +16,19 @@ angular.module('frontendApp')
         range: '=',
         chartOptions: '=options'
       },
-      controller: function($scope) {
+      controller: function ($element, $scope) {
         //array of references to svg traces that represent the plots
         var plots = $scope.plots = [];
+        var svg = d3.select($element[0]);
 
-        this.addPlot = function(name, data) {
-
+        this.addPlot = function (name, data) {
           //TODO: append a plot to svg
         }
       },
       template: "<div></div>"
     }
   })
-  .directive('ghgPlot', function (d3Service) {
+  .directive('ghgPlot', function () {
     return {
       template: '',
       restrict: 'E',
@@ -38,8 +38,8 @@ angular.module('frontendApp')
         plotData: "=data",
         chartStyle: "=style"
       },
-      link: function(scope, element, attrs, chartCtrl) {
-        chartCtrl.addPlot(scope.name)
+      link: function (scope, element, attrs, chartCtrl) {
+        chartCtrl.addPlot(scope.name, scope.data);
       }
     }
   });
