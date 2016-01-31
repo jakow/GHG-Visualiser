@@ -8,7 +8,7 @@
  * Controller of the frontendApp
  */
 angular.module('frontendApp')
-  .controller("MapCtrl", function($scope, $http, olData, olHelpers, API_BASE_URL, locationData) {
+  .controller("MapCtrl", function ($scope, $http, olData, olHelpers, API_BASE_URL, locationData) {
 
     angular.extend($scope, {
       center: {
@@ -50,7 +50,7 @@ angular.module('frontendApp')
 
       var stations_markers = [];
 
-      $scope.stations_data.forEach(function(station){
+      $scope.stations_data.forEach(function (station) {
         stations_markers.push(
           {
             source: {
@@ -69,39 +69,45 @@ angular.module('frontendApp')
 
 
     $scope.$on('openlayers.map.click', function (event, data) {
-      var station = data.event.map.forEachFeatureAtPixel(data.event.pixel, function(feature, layer) {
+      var station = data.event.map.forEachFeatureAtPixel(data.event.pixel, function (feature, layer) {
         return feature;
       });
-      if(station) {
+      if (station) {
         if (_.isEmpty(locationData.location)) {
           console.log('was empty');
-          $scope.$apply(function(scope) {
-            $scope.stations_markers[station.getId() - 1].style.image.circle.fill.color = 'rgba(255, 0, 0, 0.4)';
-            $scope.stations_markers[station.getId() - 1].style.image.circle.stroke.color = 'rgba(255, 0, 0, 1)';
+          $scope.$apply(function (scope) {
+            activate($scope.stations_markers[station.getId() - 1]);
           });
           locationData.location = _.findWhere($scope.stations_data, {id: station.getId()});
           console.log(locationData.location);
         } else if (locationData.location.id == station.getId()) {
           console.log('was the same');
-          $scope.$apply(function(scope) {
-            $scope.stations_markers[locationData.location.id - 1].style.image.circle.fill.color = 'rgba(0, 0, 255, 0.4)';
-            $scope.stations_markers[locationData.location.id - 1].style.image.circle.stroke.color = 'rgba(0, 0, 255, 1)';
+          $scope.$apply(function (scope) {
+            deactivate($scope.stations_markers[locationData.location.id - 1]);
           });
           locationData.location = {};
         } else {
           console.log('else');
-          $scope.$apply(function(scope) {
+          $scope.$apply(function (scope) {
             console.log(locationData.location);
             console.log(locationData.location.id);
-            $scope.stations_markers[locationData.location.id - 1].style.image.circle.fill.color = 'rgba(0, 0, 255, 0.4)';
-            $scope.stations_markers[locationData.location.id - 1].style.image.circle.stroke.color = 'rgba(0, 0, 255, 1)';
-            $scope.stations_markers[station.getId() - 1].style.image.circle.fill.color = 'rgba(255, 0, 0, 0.4)';
-            $scope.stations_markers[station.getId() - 1].style.image.circle.stroke.color = 'rgba(255, 0, 0, 1)';
+            deactivate($scope.stations_markers[locationData.location.id - 1]);
+            activate($scope.stations_markers[station.getId() - 1])
           });
           locationData.location = _.findWhere($scope.stations_data, {id: station.getId()});
         }
       }
     });
+
+    function activate(marker) {
+      marker.style.image.circle.fill.color = 'rgba(0, 0, 255, 0.4)';
+      marker.style.image.circle.stroke.color = 'rgba(0, 0, 255, 1)';
+    }
+
+    function deactivate(marker) {
+      marker.style.image.circle.fill.color = 'rgba(0, 0, 255, 0.4)';
+      marker.style.image.circle.stroke.color = 'rgba(0, 0, 255, 1)';
+    }
 
     //$scope.$watch(function() {return locationData.location}, function(newData) {$scope.location = newData});
     //locationData.location = {"hello": "hello from map controller!"};
