@@ -30,13 +30,13 @@ angular.module('frontendApp')
     var defaultStationStyle = {
       image: {
         circle: {
-          radius: 8,
+          radius: 12,
           fill: {
-            color: 'rgba(0, 0, 255, 0.4)'
+            color: 'rgba(31, 165, 255, 0.6)'
           },
           stroke: {
-            color: 'rgba(0, 0, 255, 1)',
-            width: 1
+            color: 'rgba(31, 165, 255, 1)',
+            width: 2
           }
         }
       }
@@ -98,14 +98,14 @@ angular.module('frontendApp')
 
     function activate(marker) {
       //console.log(marker);
-      marker.style.image.circle.fill.color = 'rgba(255, 0, 0, 0.4)';
-      marker.style.image.circle.stroke.color = 'rgba(255, 0, 0, 1)';
+      marker.style.image.circle.fill.color = 'rgba(22, 118, 182, 0.9)';
+      marker.style.image.circle.stroke.color = 'rgba(22, 118, 182, 1)';
     }
 
     function deactivate(marker) {
       //console.log(marker);
-      marker.style.image.circle.fill.color = 'rgba(0, 0, 255, 0.4)';
-      marker.style.image.circle.stroke.color = 'rgba(0, 0, 255, 1)';
+      marker.style.image.circle.fill.color = 'rgba(31, 165, 255, 0.6)';
+      marker.style.image.circle.stroke.color = 'rgba(31, 165, 255, 1)';
     }
 
     //$scope.$watch(function() {return locationData.location}, function(newData) {$scope.location = newData});
