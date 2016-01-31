@@ -64,16 +64,15 @@ angular.module('frontendApp')
     $scope.location = {};
 
     $scope.$watch(
-      function() {return locationData.location},
+      function() { return locationData.location},
       function(newData) {
-        if (_.isNumber(newData.stationId)) {
-          console.log(newData);
+        if (!_.isEmpty(newData)) {
           $scope.location = newData;
-          var request = {}
-          request.stationId = newData.stationId;
+          var request = {};
+          request.id = newData.id;
           request.measurements = "CO2";
           fetchMeasurements(request).then(function(measurements) {
-            $scope.data = measurements;
+            $scope.data = [measurements];
           })
         }
       }
@@ -81,12 +80,11 @@ angular.module('frontendApp')
 
     $scope.getdata = function() {
       locationData.getLocationData("1");
-    }
+    };
     var fetchMeasurements = function (request) {
-      return Stations.one(request.stationId).one('measurements', request.measurements.toLowerCase()).get().then(
+      return Stations.one(request.id.toString()).one('measurements', request.measurements.toLowerCase()).get().then(
         function(data) {
-          console.log(data);
-          return transformData("Station " + request.stationId + " " + request.measurements, data);
+          return transformData("Station " + request.id + " " + request.measurements, data);
         }
       )
     };
@@ -95,7 +93,7 @@ angular.module('frontendApp')
       $scope.data = [];
     }
 
-    fetchMeasurements({stationId: "1", measurements: "CO2"}).then(function (data) {
+    fetchMeasurements({id: "1", measurements: "CO2"}).then(function (data) {
       $scope.data.push(data);
     });
 

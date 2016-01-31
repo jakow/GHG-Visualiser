@@ -25,6 +25,8 @@ angular.module('frontendApp')
       stations_markers: {}
     });
 
+    $scope.height = 450;
+
     //var API_BASE_URL = 'http://demo9799735.mockable.io/';
 
     var defaultStationStyle = {
@@ -74,18 +76,21 @@ angular.module('frontendApp')
       });
       if(station) {
         if (_.isEmpty(locationData.location)) {
-          console.log('was empty');
+          //console.log('was empty');
           $scope.$apply(function (scope) {
             console.log($scope.stations_markers[station.getId() - 1]);
             activate($scope.stations_markers[station.getId() - 1]);
+            locationData.location = _.findWhere($scope.stations_data, {id: station.getId()});
           });
-          locationData.location = _.findWhere($scope.stations_data, {id: station.getId()});
+          //locationData.location = _.findWhere($scope.stations_data, {id: station.getId()});
         } else if (locationData.location.id == station.getId()) {
           console.log('was the same');
           $scope.$apply(function (scope) {
             console.log($scope.stations_markers[locationData.location.id - 1]);
             deactivate($scope.stations_markers[locationData.location.id - 1]);
+            //locationData.location = _.findWhere($scope.stations_data, {id: station.getId()});
           });
+          //locationData.location = _.findWhere($scope.stations_data, {id: station.getId()});
           locationData.location = {};
         } else {
           console.log('else');
@@ -100,13 +105,13 @@ angular.module('frontendApp')
     });
 
     function activate(marker) {
-      console.log(marker);
+      //console.log(marker);
       marker.style.image.circle.fill.color = 'rgba(255, 0, 0, 0.4)';
       marker.style.image.circle.stroke.color = 'rgba(255, 0, 0, 1)';
     }
 
     function deactivate(marker) {
-      console.log(marker);
+      //console.log(marker);
       marker.style.image.circle.fill.color = 'rgba(0, 0, 255, 0.4)';
       marker.style.image.circle.stroke.color = 'rgba(0, 0, 255, 1)';
     }
