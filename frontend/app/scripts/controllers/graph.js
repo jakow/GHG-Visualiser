@@ -39,7 +39,7 @@ angular.module('frontendApp')
           }
         },
         yAxis: {
-          axisLabel: 'Numbers',
+          axisLabel: 'Compound concentration ppm per cubic metre',
           tickFormat: function (d) {
             return d3.format(',.2f')(d);
           },

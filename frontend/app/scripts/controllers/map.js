@@ -95,7 +95,7 @@ angular.module('frontendApp')
         } else {
           console.log('else');
           $scope.$apply(function (scope) {
-            console.log($scope.stations_markers[locationData.location.id - 1]);
+            //console.log($scope.stations_markers[locationData.location.id - 1]);
             deactivate($scope.stations_markers[locationData.location.id - 1]);
             activate($scope.stations_markers[station.getId() - 1]);
           });
