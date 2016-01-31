@@ -13,7 +13,7 @@ angular.module('frontendApp')
     angular.extend($scope, {
       center: {
         lat: 54,
-        lon: 0,
+        lon: -4,
         zoom: 5
       },
       defaults: {
