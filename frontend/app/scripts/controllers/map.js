@@ -73,10 +73,17 @@ angular.module('frontendApp')
         return feature;
       });
       if(station) {
-        $scope.$apply(function(scope) {
-          $scope.stations_markers[station.getId() - 1].style.image.circle.fill.color = 'rgba(255, 0, 0, 0.4)';
-          $scope.stations_markers[station.getId() - 1].style.image.circle.stroke.color = 'rgba(255, 0, 0, 1)';
-        });
+        if (locationData.location == station.getId()) {
+          locationData.location = null;
+        } else {
+          $scope.$apply(function(scope) {
+            $scope.stations_markers[locationData.location - 1].style.image.circle.fill.color = 'rgba(0, 0, 255, 0.4)';
+            $scope.stations_markers[locationData.location - 1].style.image.circle.stroke.color = 'rgba(0, 0, 255, 1)';
+            $scope.stations_markers[station.getId() - 1].style.image.circle.fill.color = 'rgba(255, 0, 0, 0.4)';
+            $scope.stations_markers[station.getId() - 1].style.image.circle.stroke.color = 'rgba(255, 0, 0, 1)';
+          });
+          locationData.location = station.getId();
+        }
       }
     });
 
