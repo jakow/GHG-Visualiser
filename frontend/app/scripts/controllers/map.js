@@ -19,5 +19,6 @@ angular.module('frontendApp')
     $scope.height = 700;
     $scope.markers = [{'name':'London', 'lat':51.505, 'lon':-0.09},
       {'name':'Oxford', 'lat':51.751, 'lon':-1.255},
-      {'name':'Edinburgh', 'lat':55.953, 'lon':-3.188}];
+      {'name':'Edinburgh', 'lat':55.953, 'lon':-3.188},
+      {'name':'Manchester', 'lat':53.479, 'lon':-2.248}];
   });
