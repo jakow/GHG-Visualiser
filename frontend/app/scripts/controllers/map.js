@@ -10,6 +10,21 @@
 angular.module('frontendApp', ["openlayers-directive"])
   .controller("MapCtrl", [ '$scope', '$http', 'olData', 'olHelpers', function($scope, $http, olData, olHelpers) {
 
+    angular.extend($scope, {
+      center: {
+        lat: 45,
+        lon: -75.09,
+        zoom: 1
+      },
+      defaults: {
+        events: {
+          map: [ 'click' ]
+        }
+      },
+      stations_data: {},
+      stations_markers: {}
+    });
+
     var apiPath = 'http://demo9799735.mockable.io/';
 
     var defaultStationStyle = {
@@ -17,7 +32,7 @@ angular.module('frontendApp', ["openlayers-directive"])
         circle: {
           radius: 8,
             fill: {
-            color: 'rgba(0, 0, 255, 0.6)'
+            color: 'rgba(0, 0, 255, 1)'
           },
           stroke: {
             color: 'white',
@@ -51,32 +66,9 @@ angular.module('frontendApp', ["openlayers-directive"])
       $scope.stations_markers = stations_markers;
     });
 
-    angular.extend($scope, {
-      center: {
-        lat: 45,
-        lon: -75.09,
-        zoom: 1
-      },
-      kml: {
-        name: 'states',
-        source: {
-          type: 'KML',
-          projection: 'EPSG:3857',
-          url: 'states.kml'
-        }
-      },
-      defaults: {
-        events: {
-          layers: ['mousemove', 'click']
-        }
-      }
-    });
-
-    $scope.$on('openlayers.layers.states.click', function (event, feature) {
-      feature.setStyle(olHelpers.createStyle({
-        fill: {
-          color: 'rgba(0, 255, 0, 0.2)'
-        }
-      }));
+    $scope.$on('openlayers.map.click', function (event, data) {
+      data.event.map.forEachFeatureAtPixel(data.event.pixel, function(feature, layer) {
+        console.log(feature);
+      });
     });
   }]);
