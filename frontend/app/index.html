@@ -33,12 +33,14 @@
 <!-- container for openlayer maps -->
 <div class="container">
   <div class="row" id="map-container" ng-controller="MapCtrl">
-    <openlayers ol-center="mapOptions" height="{{height}}" ></openlayers>
+    <openlayers ol-center="mapOptions" height="{{height}}">
+      <ol-marker lat="{{marker.lat}}" lon="{{marker.lon}}" ng-repeat="marker in markers"></ol-marker>
+    </openlayers>
   </div>
   <!-- container for openlayer maps -->
   <div class="row" id="graph-container">
-      <ghg-chart chart-options="{background: 'green'}"  range="[1990, 2010]" zoom="1" transition="">
-        <ghg-plot ng-repeat="measurement in measurements" plot-data="measurement.data"></ghg-plot>
+      <ghg-chart options="{background: 'green'}"  range="[1990, 2010]">
+        <ghg-plot ng-repeat="measurement in measurements" name="measurement.name" data="measurement.data"></ghg-plot>
       </ghg-chart>
   </div>
 </div>

@@ -17,5 +17,5 @@ angular.module('frontendApp')
 
     $scope.width = 500; //DOM Manipulation in controller :(
     $scope.height = 700;
-
+    $scope.markers = [];
   });
