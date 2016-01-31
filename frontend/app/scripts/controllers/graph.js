@@ -11,6 +11,7 @@ angular.module('frontendApp')
   .controller('GraphCtrl', function ($scope, $http, Stations, locationData) {
     $scope.options = {
       chart: {
+        noData: "Pick a station from the map on the left.",
         type: 'lineWithFocusChart',
         height: 450,
         margin: {
@@ -67,6 +68,7 @@ angular.module('frontendApp')
       function() { return locationData.location},
       function(newData) {
         if (!_.isEmpty(newData)) {
+          console.log(newData);
           $scope.location = newData;
           var request = {};
           request.id = newData.id;
@@ -74,6 +76,9 @@ angular.module('frontendApp')
           fetchMeasurements(request).then(function(measurements) {
             $scope.data = [measurements];
           })
+        }
+        else {
+          $scope.data = [];
         }
       }
     );
@@ -92,9 +97,5 @@ angular.module('frontendApp')
     function clearMeasurements() {
       $scope.data = [];
     }
-
-    fetchMeasurements({id: "1", measurements: "CO2"}).then(function (data) {
-      $scope.data.push(data);
-    });
 
   });

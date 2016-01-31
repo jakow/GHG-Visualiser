@@ -88,18 +88,18 @@ angular.module('frontendApp')
           $scope.$apply(function (scope) {
             console.log($scope.stations_markers[locationData.location.id - 1]);
             deactivate($scope.stations_markers[locationData.location.id - 1]);
-            //locationData.location = _.findWhere($scope.stations_data, {id: station.getId()});
+            locationData.location = {};
           });
-          //locationData.location = _.findWhere($scope.stations_data, {id: station.getId()});
-          locationData.location = {};
+
         } else {
           console.log('else');
           $scope.$apply(function (scope) {
             //console.log($scope.stations_markers[locationData.location.id - 1]);
             deactivate($scope.stations_markers[locationData.location.id - 1]);
             activate($scope.stations_markers[station.getId() - 1]);
+            locationData.location = _.findWhere($scope.stations_data, {id: station.getId()});
           });
-          locationData.location = _.findWhere($scope.stations_data, {id: station.getId()});
+
         }
       }
     });
