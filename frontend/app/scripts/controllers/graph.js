@@ -19,7 +19,7 @@ angular.module('frontendApp')
           bottom: 60,
           left: 40
         },
-        duration: 500,
+        transitionDuration: 200,
         useInteractiveGuideline: true,
         x: function (d) {
           return Date.parse(d.date);
@@ -28,7 +28,7 @@ angular.module('frontendApp')
           return d.value;
         },
         xAxis: {
-          axisLabel: 'X Axis',
+          axisLabel: 'Time',
           tickFormat: function (d) {
             return d3.time.format('%x')(new Date(d))
           }
@@ -53,42 +53,29 @@ angular.module('frontendApp')
 
       }
     };
+    $scope.data = [];
 
+    function transformData(series, response) {
+      return {
+        "key": series,
+        "values": response.measurements
+      };
+    }
 
-    $http.get('http://demo9799735.mockable.io/stations/1/measurements/co2')
-      .then(function (response) {
-        var data = []; //data must be an array of data series
-        var values = response.data.measurements;
-        data.push({
-          "key": "trace",
-          "values": values
+    var fetchMeasurements = function (request) {
+      var url = 'http://demo9799735.mockable.io/'
+      url += "stations/" + request.station + "/measurements/";
+      if (request.measurements !== "all") url += request.measurements.toLowerCase();
+
+      return $http.get(url)
+        .then(function (response) {
+          return transformData("Series name", response.data); //data must be an array of data series
         });
-        console.log(data);
-        $scope.data = data;
-      });
 
-    /* Inspired by Lee Byron's test data generator. */
-    function stream_layers(n, m, o) {
-      if (arguments.length < 3) o = 0;
-      function bump(a) {
-        var x = 1 / (.1 + Math.random()),
-          y = 2 * Math.random() - .5,
-          z = 10 / (.1 + Math.random());
-        for (var i = 0; i < m; i++) {
-          var w = (i / m - y) * z;
-          a[i] += x * Math.exp(-w * w);
-        }
-      }
+    };
 
-      return d3.range(n).map(function () {
-        var a = [], i;
-        for (i = 0; i < m; i++) a[i] = o + o * Math.random();
-        for (i = 0; i < 5; i++) bump(a);
-        return a.map(stream_index);
-      });
-    }
+    fetchMeasurements({station: "1", measurements: "CO2"}).then(function (data) {
+      $scope.data.push(data);
+    });
 
-    function stream_index(d, i) {
-      return {x: i, y: Math.max(0, d)};
-    }
   });
