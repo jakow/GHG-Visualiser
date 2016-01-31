@@ -16,7 +16,8 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'openlayers-directive'
+    'openlayers-directive',
+    'nvd3'
 
   ])
   .config(function ($routeProvider) {
