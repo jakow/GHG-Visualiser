@@ -9,21 +9,37 @@
 angular.module('frontendApp')
   .directive('ghgChart', function (d3Service) {
     return {
-      template: '<div></div>',
       restrict: 'E',
-
+      transclude: true,
       //obtain scope from html markup
       scope: {
         range: '=',
         chartOptions: '=options'
       },
-      link: function (scope, element, attrs) {
-        d3Service.d3().then(function (d3) {
-          //create an svg element
-          var svg = d3.select(element[0])
-            .append("svg")
-            .style('width', '100%');
-        })
+      controller: function($scope) {
+        //array of references to svg traces that represent the plots
+        var plots = $scope.plots = [];
+
+        this.addPlot = function(name, data) {
+
+          //TODO: append a plot to svg
+        }
+      },
+      template: "<div></div>"
+    }
+  })
+  .directive('ghgPlot', function (d3Service) {
+    return {
+      template: '',
+      restrict: 'E',
+      require: '^ghgChart',
+      scope: {
+        plotName: "=name",
+        plotData: "=data",
+        chartStyle: "=style"
+      },
+      link: function(scope, element, attrs, chartCtrl) {
+        chartCtrl.addPlot(scope.name)
       }
     }
   });
