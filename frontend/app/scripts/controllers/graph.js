@@ -70,10 +70,8 @@ angular.module('frontendApp')
         if (!_.isEmpty(newLocation)) {
           console.log(newLocation);
           $scope.location = newLocation;
-          var request = {};
-          request.id = newLocation.id;
-          request.measurements = "CO2";
-          fetchMeasurements(request).then(function(measurements) {
+          newLocation.measurements = "CO2";
+          fetchMeasurements(newLocation).then(function(measurements) {
             $scope.data = [measurements];
           })
         }
@@ -88,10 +86,10 @@ angular.module('frontendApp')
     $scope.getdata = function() {
       locationData.getLocationData("1");
     };
-    var fetchMeasurements = function (request) {
-      return Stations.one(request.id.toString()).one('measurements', request.measurements.toLowerCase()).get().then(
+    var fetchMeasurements = function (location) {
+      return Stations.one(location.id.toString()).one('measurements', location.measurements.toLowerCase()).get().then(
         function(data) {
-          return transformData("Station " + request.id + " " + request.measurements, data);
+          return transformData("Station: " + location.name + " " + location.measurements, data);
         }
       )
     };
