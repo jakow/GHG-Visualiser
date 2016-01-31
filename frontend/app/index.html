@@ -34,7 +34,6 @@
 <div class="container">
   <div class="row" id="map-container" ng-controller="MapCtrl">
     <openlayers ol-center="mapOptions" height="{{height}}" >
-      <ol-marker name="London" lat="51.505" lon="-0.09"></ol-marker>
       <ol-marker ng-repeat="marker in markers" name="marker.name" lat="marker.lat" lon="marker.lon"></ol-marker>
     </openlayers>
   </div>
