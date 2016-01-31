@@ -37,8 +37,8 @@
   </div>
   <!-- container for openlayer maps -->
   <div class="row" id="graph-container">
-      <ghg-chart chart-data="data" chart-options="{background: 'green'}"  range="[1990, 2010]" zoom="1" transition="">
-        <ghg-vertical-bar ng-repeat="bar in bars"></ghg-vertical-bar>
+      <ghg-chart chart-options="{background: 'green'}"  range="[1990, 2010]" zoom="1" transition="">
+        <ghg-plot ng-repeat="measurement in measurements" plot-data="measurement.data"></ghg-plot>
       </ghg-chart>
   </div>
 </div>
@@ -77,6 +77,8 @@
 <script src="scripts/controllers/about.js"></script>
 <script src="scripts/controllers/map.js"></script>
 <script src="scripts/controllers/graph.js"></script>
+<script src="scripts/services/d3service.js"></script>
+<script src="scripts/directives/ghgchart.js"></script>
 <!-- endbuild -->
 </body>
 </html>
