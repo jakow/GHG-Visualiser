@@ -8,7 +8,7 @@
  * Controller of the frontendApp
  */
 angular.module('frontendApp')
-  .controller("MapCtrl", [ '$scope', '$http', 'olData', 'olHelpers', function($scope, $http, olData, olHelpers) {
+  .controller("MapCtrl", function($scope, $http, olData, olHelpers, API_BASE_URL, locationData) {
 
     angular.extend($scope, {
       center: {
@@ -25,7 +25,7 @@ angular.module('frontendApp')
       stations_markers: {}
     });
 
-    var apiPath = 'http://demo9799735.mockable.io/';
+    //var API_BASE_URL = 'http://demo9799735.mockable.io/';
 
     var defaultStationStyle = {
       image: {
@@ -44,7 +44,7 @@ angular.module('frontendApp')
 
     $http({
       method: 'GET',
-      url: apiPath + 'stations/'
+      url: API_BASE_URL + 'stations/'
     }).then(function successCallback(response) {
       $scope.stations_data = response.data;
 
@@ -56,7 +56,7 @@ angular.module('frontendApp')
             source: {
               type: 'GeoJSON',
               projection: 'EPSG:3857',
-              url: apiPath + 'stations/' + station.id + '/'
+              url: API_BASE_URL + 'stations/' + station.id
             },
             // evil hack
             style: JSON.parse(JSON.stringify(defaultStationStyle))
@@ -66,6 +66,7 @@ angular.module('frontendApp')
 
       $scope.stations_markers = stations_markers;
     });
+
 
     $scope.$on('openlayers.map.click', function (event, data) {
       var station = data.event.map.forEachFeatureAtPixel(data.event.pixel, function(feature, layer) {
@@ -78,4 +79,7 @@ angular.module('frontendApp')
         });
       }
     });
-  }]);
+
+    $scope.$watch(function() {return locationData.location}, function(newData) {$scope.location = newData});
+    locationData.location = {"hello": "hello from map controller!"};
+  });

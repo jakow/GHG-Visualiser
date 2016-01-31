@@ -8,7 +8,7 @@
  * Controller of the frontendApp
  */
 angular.module('frontendApp')
-  .controller('GraphCtrl', function ($scope, $http, Stations) {
+  .controller('GraphCtrl', function ($scope, $http, Stations, locationData) {
     $scope.options = {
       chart: {
         type: 'lineWithFocusChart',
@@ -61,7 +61,13 @@ angular.module('frontendApp')
         "values": response.measurements
       };
     }
+    $scope.location = {};
 
+    $scope.$watch(function() {return locationData.location}, function(newData) {$scope.location = newData});
+
+    $scope.getdata = function() {
+      locationData.getLocationData("1");
+    }
     var fetchMeasurements = function (request) {
 /*      var url = 'http://demo9799735.mockable.io/';
       url += "stations/" + request.station + "/measurements/";
