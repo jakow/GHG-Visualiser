@@ -50,7 +50,7 @@ angular.module('frontendApp')
 
       var stations_markers = [];
 
-      $scope.stations_data.forEach(function (station) {
+      $scope.stations_data.forEach(function(station){
         stations_markers.push(
           {
             source: {
@@ -69,30 +69,30 @@ angular.module('frontendApp')
 
 
     $scope.$on('openlayers.map.click', function (event, data) {
-      var station = data.event.map.forEachFeatureAtPixel(data.event.pixel, function (feature, layer) {
+      var station = data.event.map.forEachFeatureAtPixel(data.event.pixel, function(feature, layer) {
         return feature;
       });
-      if (station) {
+      if(station) {
         if (_.isEmpty(locationData.location)) {
           console.log('was empty');
           $scope.$apply(function (scope) {
+            console.log($scope.stations_markers[station.getId() - 1]);
             activate($scope.stations_markers[station.getId() - 1]);
           });
           locationData.location = _.findWhere($scope.stations_data, {id: station.getId()});
-          console.log(locationData.location);
         } else if (locationData.location.id == station.getId()) {
           console.log('was the same');
           $scope.$apply(function (scope) {
+            console.log($scope.stations_markers[locationData.location.id - 1]);
             deactivate($scope.stations_markers[locationData.location.id - 1]);
           });
           locationData.location = {};
         } else {
           console.log('else');
           $scope.$apply(function (scope) {
-            console.log(locationData.location);
-            console.log(locationData.location.id);
+            console.log($scope.stations_markers[locationData.location.id - 1]);
             deactivate($scope.stations_markers[locationData.location.id - 1]);
-            activate($scope.stations_markers[station.getId() - 1])
+            activate($scope.stations_markers[station.getId() - 1]);
           });
           locationData.location = _.findWhere($scope.stations_data, {id: station.getId()});
         }
@@ -100,11 +100,13 @@ angular.module('frontendApp')
     });
 
     function activate(marker) {
-      marker.style.image.circle.fill.color = 'rgba(0, 0, 255, 0.4)';
-      marker.style.image.circle.stroke.color = 'rgba(0, 0, 255, 1)';
+      console.log(marker);
+      marker.style.image.circle.fill.color = 'rgba(255, 0, 0, 0.4)';
+      marker.style.image.circle.stroke.color = 'rgba(255, 0, 0, 1)';
     }
 
     function deactivate(marker) {
+      console.log(marker);
       marker.style.image.circle.fill.color = 'rgba(0, 0, 255, 0.4)';
       marker.style.image.circle.stroke.color = 'rgba(0, 0, 255, 1)';
     }
