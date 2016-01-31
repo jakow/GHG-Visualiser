@@ -35,4 +35,11 @@ angular
       .otherwise({
         redirectTo: '/'
       });
-  });
+  })
+  .value('API_BASE_URL', "http://demo9799735.mockable.io/")
+  .run(function(Restangular, API_BASE_URL) {
+    Restangular.setBaseUrl(API_BASE_URL);
+  })
+  ;
+
+
