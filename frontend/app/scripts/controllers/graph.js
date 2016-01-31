@@ -17,7 +17,7 @@ angular.module('frontendApp')
           top: 20,
           right: 20,
           bottom: 60,
-          left: 40
+          left: 60
         },
         transitionDuration: 200,
         useInteractiveGuideline: true,
@@ -39,11 +39,11 @@ angular.module('frontendApp')
           }
         },
         yAxis: {
-          axisLabel: 'Y Axis',
+          axisLabel: 'Numbers',
           tickFormat: function (d) {
             return d3.format(',.2f')(d);
           },
-          rotateYLabel: false
+          rotateYLabel: true
         },
         y2Axis: {
           tickFormat: function (d) {
@@ -63,7 +63,7 @@ angular.module('frontendApp')
     }
 
     var fetchMeasurements = function (request) {
-      var url = 'http://demo9799735.mockable.io/'
+      var url = 'http://demo9799735.mockable.io/';
       url += "stations/" + request.station + "/measurements/";
       if (request.measurements !== "all") url += request.measurements.toLowerCase();
 

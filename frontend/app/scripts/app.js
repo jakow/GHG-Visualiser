@@ -12,7 +12,7 @@ angular
   .module('frontendApp', [
     'ngAnimate',
     'ngCookies',
-    'ngResource',
+    'restangular',
     'ngRoute',
     'ngSanitize',
     'ngTouch',

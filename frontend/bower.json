@@ -6,14 +6,14 @@
     "bootstrap-sass-official": "^3.2.0",
     "angular-animate": "^1.4.0",
     "angular-cookies": "^1.4.0",
-    "angular-resource": "^1.4.0",
     "angular-route": "^1.4.0",
     "angular-sanitize": "^1.4.0",
     "angular-touch": "^1.4.0",
     "angular-openlayers-directive": "~1.8.1",
     "nvd3": "~1.8.2",
     "d3": "~3.5.14",
-    "angular-nvd3": "~1.0.5"
+    "angular-nvd3": "~1.0.5",
+    "restangular": "~1.5.1"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.0"
