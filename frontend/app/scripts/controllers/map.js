@@ -7,7 +7,7 @@
  * # MapcontrollerCtrl
  * Controller of the frontendApp
  */
-angular.module('frontendApp', ["openlayers-directive"])
+angular.module('frontendApp')
   .controller("MapCtrl", [ '$scope', '$http', 'olData', 'olHelpers', function($scope, $http, olData, olHelpers) {
 
     angular.extend($scope, {

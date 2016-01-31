@@ -8,6 +8,6 @@
  * Service in the frontendApp.
  */
 angular.module('frontendApp')
-  .factory('Stations', function (Restangular) {
+  .factory('Stations', function (Restangular){
      return Restangular.all('stations');
   });

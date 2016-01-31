@@ -9,6 +9,7 @@
   <!-- build:css(.) styles/vendor.css -->
   <!-- bower:css -->
   <link rel="stylesheet" href="bower_components/openlayers3/build/ol.css" />
+  <link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css" />
   <!-- endbower -->
   <!-- endbuild -->
   <!-- build:css(.tmp) styles/main.css -->
@@ -77,17 +78,19 @@
 <script src="bower_components/lodash/lodash.js"></script>
 <script src="bower_components/restangular/dist/restangular.js"></script>
 <script src="bower_components/underscore/underscore.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
 <script src="scripts/app.js"></script>
+<script src="scripts/services/locationdata.js"></script>
+<script src="scripts/services/ghgdataapi.js"></script>
 <script src="scripts/controllers/main.js"></script>
 <script src="scripts/controllers/about.js"></script>
 <script src="scripts/controllers/map.js"></script>
 <script src="scripts/controllers/graph.js"></script>
 
-<script src="scripts/services/ghgdataapi.js"></script>
 <!-- endbuild -->
 </body>
 </html>
