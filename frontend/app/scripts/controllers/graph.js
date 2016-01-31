@@ -8,8 +8,7 @@
  * Controller of the frontendApp
  */
 angular.module('frontendApp')
-  .controller('GraphCtrl', function () {
-
-
-
+  .controller('GraphCtrl', function ($scope) {
+    $scope.data = {};
+    $scope.options = {};
   });
