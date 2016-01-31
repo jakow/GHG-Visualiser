@@ -32,7 +32,7 @@ angular.module('frontendApp')
         circle: {
           radius: 8,
           fill: {
-            color: 'rgba(0, 0, 255, 0.2)'
+            color: 'rgba(0, 0, 255, 0.4)'
           },
           stroke: {
             color: 'rgba(0, 0, 255, 1)',
@@ -73,30 +73,32 @@ angular.module('frontendApp')
         return feature;
       });
       if(station) {
-        console.log(locationData.location);
-        console.log($scope.stations_data);
         if (_.isEmpty(locationData.location)) {
           console.log('was empty');
           $scope.$apply(function(scope) {
             $scope.stations_markers[station.getId() - 1].style.image.circle.fill.color = 'rgba(255, 0, 0, 0.4)';
             $scope.stations_markers[station.getId() - 1].style.image.circle.stroke.color = 'rgba(255, 0, 0, 1)';
           });
-          locationData.location = _.find($scope.stations_data, function(o) {o.id == station.getId();});
+          locationData.location = _.findWhere($scope.stations_data, {id: station.getId()});
+          console.log(locationData.location);
         } else if (locationData.location.id == station.getId()) {
           console.log('was the same');
-          locationData.location = null;$scope.$apply(function(scope) {
+          $scope.$apply(function(scope) {
             $scope.stations_markers[locationData.location.id - 1].style.image.circle.fill.color = 'rgba(0, 0, 255, 0.4)';
             $scope.stations_markers[locationData.location.id - 1].style.image.circle.stroke.color = 'rgba(0, 0, 255, 1)';
           });
           locationData.location = {};
         } else {
+          console.log('else');
           $scope.$apply(function(scope) {
+            console.log(locationData.location);
+            console.log(locationData.location.id);
             $scope.stations_markers[locationData.location.id - 1].style.image.circle.fill.color = 'rgba(0, 0, 255, 0.4)';
             $scope.stations_markers[locationData.location.id - 1].style.image.circle.stroke.color = 'rgba(0, 0, 255, 1)';
             $scope.stations_markers[station.getId() - 1].style.image.circle.fill.color = 'rgba(255, 0, 0, 0.4)';
             $scope.stations_markers[station.getId() - 1].style.image.circle.stroke.color = 'rgba(255, 0, 0, 1)';
           });
-          locationData.location = _.find($scope.stations_data, function(o) {o.id == station.getId();});
+          locationData.location = _.findWhere($scope.stations_data, {id: station.getId()});
         }
       }
     });
