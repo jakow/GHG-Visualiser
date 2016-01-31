@@ -12,13 +12,13 @@ angular.module('frontendApp', ["openlayers-directive"])
 
     angular.extend($scope, {
       center: {
-        lat: 45,
-        lon: -75.09,
-        zoom: 1
+        lat: 54,
+        lon: 0,
+        zoom: 5
       },
       defaults: {
         events: {
-          map: [ 'click' ]
+          map: ['click']
         }
       },
       stations_data: {},
@@ -30,13 +30,13 @@ angular.module('frontendApp', ["openlayers-directive"])
     var defaultStationStyle = {
       image: {
         circle: {
-          radius: 8,
-            fill: {
+          radius: 6,
+          fill: {
             color: 'rgba(0, 0, 255, 1)'
           },
           stroke: {
-            color: 'white',
-              width: 3
+            color: 'gray',
+              width: 1
           }
         }
       }
@@ -58,7 +58,8 @@ angular.module('frontendApp', ["openlayers-directive"])
               projection: 'EPSG:3857',
               url: apiPath + 'stations/' + station.id + '/'
             },
-            style: defaultStationStyle
+            // evil hack
+            style: JSON.parse(JSON.stringify(defaultStationStyle))
           }
         );
       });
@@ -67,8 +68,13 @@ angular.module('frontendApp', ["openlayers-directive"])
     });
 
     $scope.$on('openlayers.map.click', function (event, data) {
-      data.event.map.forEachFeatureAtPixel(data.event.pixel, function(feature, layer) {
-        console.log(feature);
+      var station = data.event.map.forEachFeatureAtPixel(data.event.pixel, function(feature, layer) {
+        return feature;
       });
+      if(station) {
+        $scope.$apply(function(scope) {
+          $scope.stations_markers[station.getId() - 1].style.image.circle.fill.color = 'rgba(255, 0, 0, 1)';
+        });
+      }
     });
   }]);
