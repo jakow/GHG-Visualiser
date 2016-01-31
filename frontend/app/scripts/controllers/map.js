@@ -83,6 +83,7 @@ angular.module('frontendApp')
             $scope.stations_markers[station.getId() - 1].style.image.circle.stroke.color = 'rgba(255, 0, 0, 1)';
           });
           locationData.location = station.getId();
+
         }
       }
     });
