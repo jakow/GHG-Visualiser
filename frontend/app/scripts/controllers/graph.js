@@ -63,24 +63,30 @@ angular.module('frontendApp')
     }
     $scope.location = {};
 
-    $scope.$watch(function() {return locationData.location}, function(newData) {$scope.location = newData});
+    $scope.$watch(
+      function() {return locationData.location},
+      function(newData) {
+        if (_.isNumber(newData.stationId)) {
+          console.log(newData);
+          $scope.location = newData;
+          var request = {}
+          request.stationId = newData.stationId;
+          request.measurements = "CO2";
+          fetchMeasurements(request).then(function(measurements) {
+            $scope.data = measurements;
+          })
+        }
+      }
+    );
 
     $scope.getdata = function() {
       locationData.getLocationData("1");
     }
     var fetchMeasurements = function (request) {
-/*      var url = 'http://demo9799735.mockable.io/';
-      url += "stations/" + request.station + "/measurements/";
-      if (request.measurements !== "all") url += request.measurements.toLowerCase();
-
-      return $http.get(url)
-        .then(function (response) {
-          return transformData("Series name", response.data); //data must be an array of data series
-        });*/
-      return Stations.one(request.station).one('measurements', request.measurements.toLowerCase()).get().then(
+      return Stations.one(request.stationId).one('measurements', request.measurements.toLowerCase()).get().then(
         function(data) {
           console.log(data);
-          return transformData("Station " + request.station + " " + request.measurements, data);
+          return transformData("Station " + request.stationId + " " + request.measurements, data);
         }
       )
     };
@@ -89,7 +95,7 @@ angular.module('frontendApp')
       $scope.data = [];
     }
 
-    fetchMeasurements({station: "1", measurements: "CO2"}).then(function (data) {
+    fetchMeasurements({stationId: "1", measurements: "CO2"}).then(function (data) {
       $scope.data.push(data);
     });
 
