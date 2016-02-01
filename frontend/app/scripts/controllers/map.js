@@ -9,7 +9,9 @@
  */
 angular.module('frontendApp')
   .controller("MapCtrl", function ($scope, $http, olData, olHelpers, API_BASE_URL, locationData) {
-
+    var click = function () {
+      console.log('Click!');
+    };
     angular.extend($scope, {
       center: {
         lat: 54,
@@ -25,6 +27,11 @@ angular.module('frontendApp')
       stations_markers: {}
     });
 
+    /*$scope.markers = [
+      {lon: 10, lat: 10, onClick: click},
+      {lon: 20, lat: 20, onClick: click},
+      {lon: 30, lat: 30, onClick: click}
+    ];*/
     $scope.height = 450;
 
     var defaultStationStyle = {
@@ -68,33 +75,33 @@ angular.module('frontendApp')
     });
 
     $scope.$on('openlayers.map.click', function (event, data) {
-      var station = data.event.map.forEachFeatureAtPixel(data.event.pixel, function (feature, layer) {
-        return feature;
-      });
-      if (station) {
-        var locationId = locationData.location.id;
-        if (_.isEmpty(locationData.location)) {
-          //activate if none was activated
-          $scope.$apply(function () {
-            activate($scope.stations_markers[station.getId() - 1]);
-            locationData.location = _.findWhere($scope.stations_data, {id: station.getId()});
-          });
-        } else if (locationData.location.id == station.getId()) {
-          //deselect if already selected
-          $scope.$apply(function () {
-            deactivate($scope.stations_markers[locationId - 1]);
-            locationData.location = {};
-          });
-        } else {
-          //or just select a new one
-          $scope.$apply(function () {
-            activate($scope.stations_markers[station.getId() - 1]);
-            deactivate($scope.stations_markers[locationId - 1]);
-            locationData.location = _.findWhere($scope.stations_data, {id: station.getId()});
-          });
-        }
-      }
-    });
+     var station = data.event.map.forEachFeatureAtPixel(data.event.pixel, function (feature, layer) {
+     return feature;
+     });
+     if (station) {
+     var locationId = locationData.location.id;
+     if (_.isEmpty(locationData.location)) {
+     //activate if none was activated
+     $scope.$apply(function () {
+     activate($scope.stations_markers[station.getId() - 1]);
+     locationData.location = _.findWhere($scope.stations_data, {id: station.getId()});
+     });
+     } else if (locationData.location.id == station.getId()) {
+     //deselect if already selected
+     $scope.$apply(function () {
+     deactivate($scope.stations_markers[locationId - 1]);
+     locationData.location = {};
+     });
+     } else {
+     //or just select a new one
+     $scope.$apply(function () {
+     activate($scope.stations_markers[station.getId() - 1]);
+     deactivate($scope.stations_markers[locationId - 1]);
+     locationData.location = _.findWhere($scope.stations_data, {id: station.getId()});
+     });
+     }
+     }
+     });
 
     function activate(marker) {
       //console.log(marker);

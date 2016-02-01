@@ -11,3 +11,5 @@ angular.module('frontendApp')
   .factory('Stations', function (Restangular){
      return Restangular.all('stations');
   });
+
+Restangular.one('stations', '1').all('measurements');

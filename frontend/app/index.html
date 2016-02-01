@@ -42,15 +42,17 @@
       the horizontal axis.</p>
   </div>
   <div class="row">
-    <div class="col-xs-4" id="map-container" ng-controller="MapCtrl">
+    <div class="col-md-4" id="map-container" ng-controller="MapCtrl">
       <openlayers ol-center="center" ol-defaults="defaults" height="{{height}}">
         <!--<ol-marker lat="marker.lat" lon="marker.lon" ng-repeat="marker in markers"></ol-marker>-->
+        <!--<ol-marker ol-marker-properties="marker" ng-repeat="marker in markers"></ol-marker>-->
         <ol-layer ol-layer-properties="kml"></ol-layer>
         <ol-layer ol-layer-properties="marker" ng-repeat="marker in stations_markers"></ol-layer>
+
       </openlayers>
     </div>
     <!-- container for openlayer maps -->
-    <div class="col-xs-8" id="graph-container" ng-controller="GraphCtrl">
+    <div class="col-md-8" id="graph-container" ng-controller="GraphCtrl">
       <nvd3 options="options" data="data" api="api"></nvd3>
     </div>
   </div>
@@ -99,7 +101,7 @@
 <script src="scripts/controllers/about.js"></script>
 <script src="scripts/controllers/map.js"></script>
 <script src="scripts/controllers/graph.js"></script>
-
+<script src="scripts/directives/olmarkercustom.js"></script>
 <!-- endbuild -->
 </body>
 </html>

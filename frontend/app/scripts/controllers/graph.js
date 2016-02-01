@@ -77,7 +77,7 @@ angular.module('frontendApp')
         }
         else {
           $scope.data = [];
-          $scope.api.clearElement();
+          //$scope.api.clearElement();
         }
         console.log($scope.data);
       }
